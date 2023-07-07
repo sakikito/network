@@ -1,17 +1,13 @@
 import networkx as nx
 import pandas as pd
 
-# ノード数 : n
-# エッジの張り替える確率 : p
-
 degrees = []
 eigenvectors = []
 pageranks = []
 betweenesses = []
 
-# 次数集中度
 def degree_concentrate(G):
-    # 次数中心性
+
     gd_degree_centrality = pd.Series(nx.degree_centrality(G))
     sum = 0
     for i in range(0, len(gd_degree_centrality)):
@@ -19,9 +15,8 @@ def degree_concentrate(G):
     arg = sum / len(gd_degree_centrality)
     degrees.append(arg)
         
-# 固有ベクトル集中度
 def eigenvector_concentrate(G):
-    # 固有ベクトル中心性
+
     gd_eigenvector_centrality = pd.Series(nx.eigenvector_centrality(G))
     sum = 0
     for i in range(0, len(gd_eigenvector_centrality)):
@@ -29,9 +24,8 @@ def eigenvector_concentrate(G):
     arg = sum / len(gd_eigenvector_centrality)
     eigenvectors.append(arg)
         
-# ページランク集中度
 def pagerank_concentrate(G):
-    # ページランク：PageRank
+    
     gd_pagerank = pd.Series(nx.pagerank(G))
     sum = 0
     for i in range(0, len(gd_pagerank)):
@@ -39,9 +33,8 @@ def pagerank_concentrate(G):
     arg = sum / len(gd_pagerank)
     pageranks.append(arg)
         
-# 媒介集中度
 def betweeness_concentrate(G):
-    # 媒介中心性：Betweeness centrality
+
     gd_betweenness_centrality = pd.Series(nx.betweenness_centrality(G))
     sum = 0
     for i in range(0, len(gd_betweenness_centrality)):
@@ -58,38 +51,27 @@ def make_network(n, k, p, q):
     
     for i in range(0, q):
 
-        # G
         G = nx.watts_strogatz_graph(n,k,p)
 
-        # V
         nodes.append(G.number_of_nodes())
 
-        # E
         edges.append(G.number_of_edges())
 
-        # C
         clusterings.append(nx.average_clustering(G))
 
-        # D
         lengths.append(nx.average_shortest_path_length(G))
 
-        # 次数集中度
         degree_concentrate(G)
 
-        # 固有ベクトル集中度
         # eigenvector_concentrate(G)
 
-        # ページランク集中度
         pagerank_concentrate(G)
 
-        # 媒介集中度
         betweeness_concentrate(G) 
-
-    # excelファイルに書き込む 
-    # 以下、エクセル出力に関する部分
+        
     import openpyxl
     
-    wb = openpyxl.Workbook() #エクセルファイルを新規作成
+    wb = openpyxl.Workbook()
     sheet = wb.active
     sheet.title = 'dataset' 
     
